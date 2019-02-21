@@ -67,7 +67,7 @@ router.post(`/`, (req, res) => {
       return;
     }
     
-    let insertString = `INSERT INTO franchise (ORDER_ID, ORDER_DATE, ORDER_TIME, ORDER_TIMESTAMP, LOYALTY_PROGRAM, CUST_ID, ORDER_PHONE_NUMBER, ORDER_TYPE, STORE_ID, AMOUNT) VALUES ('${ORDER_ID}', '${ORDER_DATE}', '${ORDER_TIME}', '${ORDER_TIMESTAMP}', '${LOYALTY_PROGRAM}', '${CUST_ID}', '${ORDER_PHONE_NUMBER}', '${ORDER_TYPE}', '${STORE_ID}', '${AMOUNT}')`;
+    let insertString = `INSERT INTO franchise (ORDER_ID, ORDER_DATE, ORDER_TIME, ORDER_TIMESTAMP, LOYALTY_PROGRAM, CUST_ID, ORDER_PHONE_NUMBER, ORDER_TYPE, STORE_ID, AMOUNT) VALUES (${ORDER_ID}, '${ORDER_DATE}', '${ORDER_TIME}', '${ORDER_TIMESTAMP}', '${LOYALTY_PROGRAM}', ${CUST_ID}, '${ORDER_PHONE_NUMBER}', '${ORDER_TYPE}', ${STORE_ID}, ${AMOUNT})`;
 
     // eslint-disable-next-line no-console
     console.log(`insertString`);
@@ -76,7 +76,7 @@ router.post(`/`, (req, res) => {
 
     connection.execute(insertString, (err, result) => {
       if (err) {
-        let replyObj = {};
+        let replyObj = {}; 
         replyObj.error = err;
         replyObj.status = `Record Not Inserted`;
         res.status(202).send(replyObj);
