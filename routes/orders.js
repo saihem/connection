@@ -67,9 +67,9 @@ router.post(`/`, (req, res) => {
       return;
     }
     
-    let insertString = `INSERT INTO franchise (ORDER_ID, ORDER_DATE, ORDER_TIME, ORDER_TIMESTAMP, LOYALTY_PROGRAM, CUST_ID, ORDER_PHONE_NUMBER, ORDER_TYPE, STORE_ID, AMOUNT) VALUES (${ORDER_ID}, '${ORDER_DATE}', '${ORDER_TIME}', '${ORDER_TIMESTAMP}', '${LOYALTY_PROGRAM}', ${CUST_ID}, '${ORDER_PHONE_NUMBER}', '${ORDER_TYPE}', ${STORE_ID}, ${AMOUNT})`;
+    let insertString = `INSERT INTO ORDERS_DATA (ORDER_ID, ORDER_DATE, ORDER_TIME, ORDER_TIMESTAMP, LOYALTY_PROGRAM, CUST_ID, ORDER_PHONE_NUMBER, ORDER_TYPE, STORE_ID, AMOUNT) VALUES (${ORDER_ID}, '${ORDER_DATE}', '${ORDER_TIME}', '${ORDER_TIMESTAMP}', '${LOYALTY_PROGRAM}', ${CUST_ID}, '${ORDER_PHONE_NUMBER}', '${ORDER_TYPE}', ${STORE_ID}, ${AMOUNT})`;
 
-    // eslint-disable-next-line no-console
+    // eslint-disable-next-line no-consoleb
     console.log(`insertString`);
     // eslint-disable-next-line no-console
     console.log(insertString);
