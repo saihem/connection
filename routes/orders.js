@@ -5,7 +5,7 @@ const dbConfig = require(`./dbconfig`);
 const oracledb = require(`oracledb`);
 
 
-/* GET users listing. */
+/* GET franchise listings. */
 router.get(`/`, (req, res) => {
   oracledb.getConnection({
     user: dbConfig.dbuser,
@@ -13,13 +13,13 @@ router.get(`/`, (req, res) => {
     connectString: dbConfig.connectString
   }, (err, connection) => {
     if (err) {
-      res.status(500).send(err);
+      res.send(err);
       doRelease(connection);
       return;
     }
-    connection.execute(`SELECT * FROM users`, [], (err, result) => {
+    connection.execute(`SELECT * FROM ORDERS_DATA`, [], (err, result) => {
       if (err) {
-        res.status(500).send(err);
+        res.send(err);
         doRelease(connection);
         return;
       }
@@ -37,27 +37,21 @@ router.get(`/`, (req, res) => {
   });
 });
 
-/* POST user data. */
+/* POST orders data. */
 router.post(`/`, (req, res) => {
 
-  let USER_ID = req.body.USER_ID;
+  let ORDER_ID = req.body.ORDER_ID;
+  let ORDER_DATE = req.body.ORDER_DATE;
+  let ORDER_TIME = req.body.ORDER_TIME;
+  let ORDER_TIMESTAMP = req.body.ORDER_TIMESTAMP;
+  let LOYALTY_PROGRAM = req.body.LOYALTY_PROGRAM;
+  let CUST_ID = req.body.CUST_ID;
+  let ORDER_PHONE_NUMBER = req.body.ORDER_PHONE_NUMBER;
+  let ORDER_TYPE = req.body.ORDER_TYPE;
+  let STORE_ID = req.body.STORE_ID;
+  let AMOUNT = req.body.AMOUNT;
 
-  let nameArr = req.body.LAST_NAME.split(`'`);
-  let FIRST_NAME = nameArr.join(`''`);;
-
-  nameArr = req.body.LAST_NAME.split(`'`);
-  let LAST_NAME = nameArr.join(`''`);
-
-  let PHONE_NUMBER = req.body.PHONE_NUMBER;
-  let HOME_ADDRESS = req.body.HOME_ADDRESS;
-  let EMAIL_ADDRESS = req.body.EMAIL_ADDRESS;
-  let TAX_ID = req.body.TAX_ID;
-  let USER_CITY = req.body.USER_CITY;
-  let USER_STATE = req.body.USER_STATE;
-  let USER_ZIP = req.body.USER_ZIP;
-  let FRANCHISE_ID = req.body.FRANCHISE_ID;
-
-  if (!USER_ID || !FIRST_NAME || !LAST_NAME || !PHONE_NUMBER || !HOME_ADDRESS || !EMAIL_ADDRESS || !TAX_ID || !USER_CITY || !USER_STATE || !USER_ZIP || !FRANCHISE_ID) {
+  if (!ORDER_ID || !ORDER_DATE || !ORDER_TIME || !ORDER_TIMESTAMP || !LOYALTY_PROGRAM || !CUST_ID || !ORDER_PHONE_NUMBER || !ORDER_TYPE || !STORE_ID || !AMOUNT) {
     res.status(400).send(`Required data missing from request body.`);
     return;
   }
@@ -72,8 +66,8 @@ router.post(`/`, (req, res) => {
       doRelease(connection);
       return;
     }
-
-    let insertString = `INSERT INTO users (USER_ID, FIRST_NAME, LAST_NAME, PHONE_NUMBER, HOME_ADDRESS, EMAIL_ADDRESS, TAX_ID, USER_CITY, USER_STATE, USER_ZIP, FRANCHISE_ID) VALUES (${USER_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${PHONE_NUMBER}', '${HOME_ADDRESS}', '${EMAIL_ADDRESS}', '${TAX_ID}', '${USER_CITY}', '${USER_STATE}', ${USER_ZIP}, ${FRANCHISE_ID})`;
+    
+    let insertString = `INSERT INTO franchise (ORDER_ID, ORDER_DATE, ORDER_TIME, ORDER_TIMESTAMP, LOYALTY_PROGRAM, CUST_ID, ORDER_PHONE_NUMBER, ORDER_TYPE, STORE_ID, AMOUNT) VALUES ('${ORDER_ID}', '${ORDER_DATE}', '${ORDER_TIME}', '${ORDER_TIMESTAMP}', '${LOYALTY_PROGRAM}', '${CUST_ID}', '${ORDER_PHONE_NUMBER}', '${ORDER_TYPE}', '${STORE_ID}', '${AMOUNT}')`;
 
     // eslint-disable-next-line no-console
     console.log(`insertString`);
@@ -104,6 +98,7 @@ router.post(`/`, (req, res) => {
     });
   });
 });
+
 
 function doRelease(connection) {
   connection.close(

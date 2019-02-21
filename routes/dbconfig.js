@@ -1,5 +1,5 @@
 module.exports = {
-  dbuser: `admin`,
-  dbpassword: process.env.DB_PW,
-  connectString: process.env.DB_STRING
+  dbuser: "ADMIN",
+  dbpassword: "RumbleInTheCloud7!",
+  connectString: "adb.us-ashburn-1.oraclecloud.com:1522/jo6hjypy8qdnvzq_maggysadw_high.adwc.oraclecloud.com"
 };
