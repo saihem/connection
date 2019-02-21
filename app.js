@@ -26,11 +26,12 @@ app.use(`/`, indexRouter);
 app.use(`/customers`, customerRouter);
 app.use(`/orders`, orderRouter);
 
+console.log("DAFSdsdsa");
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
-
+console.log("DAFdfsdsffdfddddSdsdsa");
 // error handler
 app.use(function (err, req, res) {
   // set locals, only providing error in development

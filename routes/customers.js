@@ -68,7 +68,7 @@ router.post(`/`, (req, res) => {
       return;
     }
 
-    let insertString = `INSERT INTO users (CUST_ID, FIRST_NAME, LAST_NAME, PHONE_NUMBER, EMAIL, GENDER, STATE, AGE) VALUES (${CUST_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${PHONE_NUMBER}', '${EMAIL}', '${GENDER}', '${STATE}', '${AGE}')`;
+    let insertString = `INSERT INTO users (CUST_ID, FIRST_NAME, LAST_NAME, PHONE_NUMBER, EMAIL, GENDER, STATE, AGE) VALUES (${CUST_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${PHONE_NUMBER}', '${EMAIL}', '${GENDER}', '${STATE}', ${AGE})`;
 
     // eslint-disable-next-line no-console
     console.log(`insertString`);
