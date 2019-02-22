@@ -39,31 +39,6 @@ router.get(`/`, (req, res) => {
 
 /* POST user data. */
 router.post(`/`, (req, res) => {
-  console.log(req.body);
-  for (i = 0; i < req.body.length; i++) {
-    let me = req.body[i];
-    console.log(me);
-    let CUST_ID = me.CUST_ID;
-
-    let FIRST_NAME = me.FIRST_NAME;
-
-    let LAST_NAME = me.LAST_NAME;
-
-    let PHONE_NUMBER = me.PHONE_NUMBER;
-    let EMAIL = me.EMAIL;
-    let GENDER = me.GENDER;
-    let STATE = me.STATE;
-    let AGE = me.AGE;
-
-  
-
-    if (!CUST_ID || !FIRST_NAME || !LAST_NAME || !PHONE_NUMBER || !EMAIL || !GENDER || !STATE || !AGE) {
-      res.status(400).send(`Required data missing from request body.`);
-      return;
-    }
-
-
-
     oracledb.getConnection({
       user: dbConfig.dbuser,
       password: dbConfig.dbpassword,
@@ -74,6 +49,16 @@ router.post(`/`, (req, res) => {
         doRelease(connection);
         return;
       }
+      for (i = 0; i < req.body.length; i++) {
+        let me = req.body[i];
+        let CUST_ID = me.CUST_ID || null;
+        let FIRST_NAME = me.FIRST_NAME || null;
+        let LAST_NAME = me.LAST_NAME || null;
+        let PHONE_NUMBER = me.PHONE_NUMBER || null;
+        let EMAIL = me.EMAIL || null;
+        let GENDER = me.GENDER || null;
+        let STATE = me.STATE || null;
+        let AGE = me.AGE || null;
 
       let insertString = `INSERT INTO CUSTOMER_DATA (CUST_ID, FIRST_NAME, LAST_NAME, EMAIL,GENDER, PHONE_NUMBER, STATE, AGE) VALUES (${CUST_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${EMAIL}', '${GENDER}', '${PHONE_NUMBER}','${STATE}', ${AGE})`;
 
@@ -104,8 +89,8 @@ router.post(`/`, (req, res) => {
           doRelease(connection);
         });
       });
+    };
     });
-  };
 });
 
 function doRelease(connection) {
