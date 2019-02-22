@@ -39,52 +39,50 @@ router.get(`/`, (req, res) => {
 
 /* POST user data. */
 router.post(`/`, (req, res) => {
+  console.log(req.body);
+  for (i = 0; i < req.body.length; i++) {
+    let me = req.body[i];
+    console.log(me);
+    let CUST_ID = me.CUST_ID;
 
-  let CUST_ID = req.body.CUST_ID;
+    let FIRST_NAME = me.FIRST_NAME;
 
-  let FIRST_NAME = req.body.FIRST_NAME;
+    let LAST_NAME = me.LAST_NAME;
 
-  let LAST_NAME = req.body.LAST_NAME;
+    let PHONE_NUMBER = me.PHONE_NUMBER;
+    let EMAIL = me.EMAIL;
+    let GENDER = me.GENDER;
+    let STATE = me.STATE;
+    let AGE = me.AGE;
 
-  let PHONE_NUMBER = req.body.PHONE_NUMBER;
-  let EMAIL = req.body.EMAIL;
-  let GENDER = req.body.GENDER;
-  let STATE = req.body.STATE;
-  let AGE = req.body.AGE;
+  
 
-  if (!CUST_ID || !FIRST_NAME || !LAST_NAME || !PHONE_NUMBER || !EMAIL || !GENDER || !STATE || !AGE) {
-    res.status(400).send(`Required data missing from request body.`);
-    return;
-  }
-
-  oracledb.getConnection({
-    user: dbConfig.dbuser,
-    password: dbConfig.dbpassword,
-    connectString: dbConfig.connectString
-  }, (err, connection) => {
-    if (err) {
-      res.status(500).send(err);
-      doRelease(connection);
+    if (!CUST_ID || !FIRST_NAME || !LAST_NAME || !PHONE_NUMBER || !EMAIL || !GENDER || !STATE || !AGE) {
+      res.status(400).send(`Required data missing from request body.`);
       return;
     }
 
-    let insertString = `INSERT INTO CUSTOMER_DATA (CUST_ID, FIRST_NAME, LAST_NAME, PHONE_NUMBER, EMAIL, GENDER, STATE, AGE) VALUES (${CUST_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${PHONE_NUMBER}', '${EMAIL}', '${GENDER}', '${STATE}', ${AGE})`;
 
-    // eslint-disable-next-line no-console
-    console.log(`insertString`);
-    // eslint-disable-next-line no-console
-    console.log(insertString);
 
-    connection.execute(insertString, (err, result) => {
+    oracledb.getConnection({
+      user: dbConfig.dbuser,
+      password: dbConfig.dbpassword,
+      connectString: dbConfig.connectString
+    }, (err, connection) => {
       if (err) {
-        let replyObj = {};
-        replyObj.error = err;
-        replyObj.status = `Record Not Inserted`;
-        res.status(202).send(replyObj);
+        res.status(500).send(err);
         doRelease(connection);
         return;
       }
-      connection.commit((err) => {
+
+      let insertString = `INSERT INTO CUSTOMER_DATA (CUST_ID, FIRST_NAME, LAST_NAME, EMAIL,GENDER, PHONE_NUMBER, STATE, AGE) VALUES (${CUST_ID}, '${FIRST_NAME}', '${LAST_NAME}', '${EMAIL}', '${GENDER}', '${PHONE_NUMBER}','${STATE}', ${AGE})`;
+
+      // eslint-disable-next-line no-console
+      console.log(`insertString`);
+      // eslint-disable-next-line no-console
+      console.log(insertString);
+
+      connection.execute(insertString, (err, result) => {
         if (err) {
           let replyObj = {};
           replyObj.error = err;
@@ -93,11 +91,21 @@ router.post(`/`, (req, res) => {
           doRelease(connection);
           return;
         }
-        res.send(result);
-        doRelease(connection);
+        connection.commit((err) => {
+          if (err) {
+            let replyObj = {};
+            replyObj.error = err;
+            replyObj.status = `Record Not Inserted`;
+            res.status(202).send(replyObj);
+            doRelease(connection);
+            return;
+          }
+          res.send(result);
+          doRelease(connection);
+        });
       });
     });
-  });
+  };
 });
 
 function doRelease(connection) {
